@@ -67,12 +67,16 @@ export default function Hero() {
       const playPromise = video.play()
       if (playPromise) playPromise.catch(() => {})
 
-      tooltipRefs.current.forEach((el) => {
-        if (el) {
-          el.style.opacity = '1'
-          el.style.transform = 'translateY(0)'
-        }
-      })
+      // On mobile, hide tooltips entirely — they overlap the H1.
+      // With reduced-motion on desktop, reveal them statically.
+      if (!isMobile) {
+        tooltipRefs.current.forEach((el) => {
+          if (el) {
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          }
+        })
+      }
       return
     }
 
@@ -181,7 +185,7 @@ export default function Hero() {
             <div className="flex gap-3 sm:gap-4 flex-wrap">
               <a
                 href={TEL_HREF}
-                className="bg-[#FF6B00] text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:bg-[#FFB280] transition-colors"
+                className="inline-flex items-center min-h-11 bg-[#FF6B00] text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:bg-[#FFB280] transition-colors"
               >
                 {copy.cta.call}
               </a>
@@ -189,7 +193,7 @@ export default function Hero() {
                 href={product.contact.telegramLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border border-white/30 text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:border-white transition-colors"
+                className="inline-flex items-center min-h-11 border border-white/30 text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:border-white transition-colors"
               >
                 {copy.cta.telegram}
               </a>
@@ -203,7 +207,7 @@ export default function Hero() {
             ref={(el) => {
               tooltipRefs.current[i] = el
             }}
-            className={`absolute z-20 pointer-events-none max-w-[200px] ${t.className}`}
+            className={`absolute z-20 pointer-events-none max-w-[200px] hidden md:block ${t.className}`}
             style={{ opacity: 0, transform: 'translateY(10px)', willChange: 'transform, opacity' }}
             aria-hidden
           >

@@ -10,7 +10,12 @@ export default function TechSpecs() {
   const shouldReduce = useReducedMotion()
 
   useEffect(() => {
-    if (shouldReduce || !priceRef.current) return
+    if (!priceRef.current) return
+
+    if (shouldReduce) {
+      priceRef.current.textContent = '150 ₽/м²'
+      return
+    }
 
     const obj = { val: 0 }
     ScrollTrigger.create({
@@ -46,7 +51,7 @@ export default function TechSpecs() {
               ref={priceRef}
               className="font-[family-name:var(--font-family-mono)] font-semibold text-[clamp(48px,8vw,80px)] text-[#FF6B00]"
             >
-              {shouldReduce ? '150 ₽/м²' : '0 ₽/м²'}
+              0 ₽/м²
             </span>
             <span className="text-[#6B6B6B] text-sm">от производителя, без посредников</span>
           </div>
