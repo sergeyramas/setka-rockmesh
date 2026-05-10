@@ -33,8 +33,8 @@ export default function DeliveryCalculator() {
   )
 
   return (
-    <section className="bg-white py-12 sm:py-16">
-      <div className="mx-auto max-w-[1120px] px-4 sm:px-8">
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
         <div className="mb-8 max-w-2xl">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#FF6B00]">
             Расчёт доставки
