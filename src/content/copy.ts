@@ -28,7 +28,7 @@ export const copy = {
   // Section 1.5 — CTA (APPROVED)
   cta: {
     call: 'Позвонить',
-    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
     callTagline: 'ЗВОНИТЕ или ПИШИТЕ прямо сейчас. Мы на связи!',
   },
 
@@ -148,13 +148,13 @@ export const copy = {
     heading: 'Остались вопросы?',
     body: 'Звоните, напишите — с удовольствием ответим на все интересующие вас вопросы!',
     call: 'Позвонить',
-    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
   },
 
   // MobileStickyCTA (NEW)
   mobileCta: {
     call: 'Позвонить',
-    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
   },
 
   // Footer (NEW)

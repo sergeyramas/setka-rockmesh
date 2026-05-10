@@ -35,12 +35,12 @@ export default function MobileStickyCTA() {
               📞 {copy.mobileCta.call}
             </a>
             <a
-              href={product.contact.whatsappLink}
+              href={product.contact.telegramLink}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 flex items-center justify-center gap-2 bg-[#00A86B] text-white font-[family-name:var(--font-family-display)] font-bold text-sm"
             >
-              💬 {copy.mobileCta.whatsapp}
+              💬 {copy.mobileCta.telegram}
             </a>
           </div>
         </motion.div>

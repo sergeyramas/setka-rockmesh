@@ -48,10 +48,10 @@ export const product = {
     },
   ],
   contact: {
-    phone: '+7 (800) 200-18-49',           // PLACEHOLDER — BetaLine
-    phoneDisplay: '8 (800) 200-18-49',      // PLACEHOLDER
-    whatsappHandle: '@Andrei_Stanislavovich', // PLACEHOLDER
-    whatsappLink: 'https://wa.me/78002001849', // PLACEHOLDER
+    phone: '+7 (800) 200-18-49',
+    phoneDisplay: '8 (800) 200-18-49',
+    telegramHandle: '@Andrei_Stanislavovich',
+    telegramLink: 'https://t.me/Andrei_Stanislavovich',
   },
   carriers: ['СДЭК', 'Деловые Линии'],      // PLACEHOLDER
   seller: {

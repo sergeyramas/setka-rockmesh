@@ -47,9 +47,9 @@ export default function MarketplaceCard() {
         />
         <CardCTA
           phone={product.contact.phone}
-          whatsappLink={product.contact.whatsappLink}
+          telegramLink={product.contact.telegramLink}
           callLabel={copy.cta.call}
-          waLabel={copy.cta.whatsapp}
+          tgLabel={copy.cta.telegram}
           tagline={copy.cta.callTagline}
         />
       </div>

@@ -68,8 +68,8 @@ export default function Hero() {
           <MagneticButton href={`tel:${product.contact.phone}`} variant="primary">
             📞 {copy.cta.call}
           </MagneticButton>
-          <MagneticButton href={product.contact.whatsappLink} variant="ghost">
-            💬 {copy.cta.whatsapp}
+          <MagneticButton href={product.contact.telegramLink} variant="ghost">
+            💬 {copy.cta.telegram}
           </MagneticButton>
         </div>
       </motion.div>

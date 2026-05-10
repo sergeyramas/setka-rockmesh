@@ -16,8 +16,8 @@ export default function FinalCTA() {
           <MagneticButton href={`tel:${product.contact.phone}`} variant="primary">
             📞 {copy.finalCta.call}
           </MagneticButton>
-          <MagneticButton href={product.contact.whatsappLink} variant="secondary">
-            💬 {copy.finalCta.whatsapp}
+          <MagneticButton href={product.contact.telegramLink} variant="secondary">
+            💬 {copy.finalCta.telegram}
           </MagneticButton>
         </div>
       </div>
