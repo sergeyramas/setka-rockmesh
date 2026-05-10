@@ -57,10 +57,6 @@ export default function Manufacturer() {
                     className="object-cover"
                     sizes="(max-width: 640px) 100vw, 33vw"
                   />
-                  {/* PLACEHOLDER badge */}
-                  <div className="absolute top-2 right-2 bg-[#FF6B00]/90 text-white text-[10px] px-2 py-1 rounded font-bold">
-                    PLACEHOLDER
-                  </div>
                 </div>
                 <div className="p-4">
                   <p className="font-semibold text-[#0F0F0F] text-sm">{obj.name}</p>

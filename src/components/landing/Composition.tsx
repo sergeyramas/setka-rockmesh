@@ -13,16 +13,6 @@ export default function Composition() {
           {copy.composition.subheading}
         </p>
 
-        {/* Wow-video slot — replaced post-launch */}
-        <div
-          data-wow-video-slot
-          className="w-full aspect-video bg-[#F5F5F5] rounded-[16px] mb-12 flex items-center justify-center text-[#6B6B6B] text-sm"
-          aria-hidden="true"
-        >
-          {copy.composition.wowSlot}
-        </div>
-
-        {/* Composition grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {product.composition.map((layer, i) => (
             <div key={layer.key} className="flex flex-col gap-4">

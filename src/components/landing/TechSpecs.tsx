@@ -17,14 +17,22 @@ export default function TechSpecs() {
       return
     }
 
-    const obj = { val: 0 }
-    ScrollTrigger.create({
+    // Show final value immediately so partial scroll never leaves the user on "0"
+    priceRef.current.textContent = '150 ₽/м²'
+
+    const obj = { val: 150 }
+    let played = false
+    const trigger = ScrollTrigger.create({
       trigger: priceRef.current,
-      start: 'top 80%',
+      start: 'top 95%',
       onEnter: () => {
+        if (played) return
+        played = true
+        obj.val = 0
+        if (priceRef.current) priceRef.current.textContent = '0 ₽/м²'
         gsap.to(obj, {
           val: 150,
-          duration: 1.5,
+          duration: 0.9,
           ease: 'power2.out',
           onUpdate: () => {
             if (priceRef.current) priceRef.current.textContent = `${Math.round(obj.val)} ₽/м²`
@@ -33,7 +41,7 @@ export default function TechSpecs() {
       },
     })
 
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill())
+    return () => trigger.kill()
   }, [shouldReduce])
 
   return (
@@ -51,7 +59,7 @@ export default function TechSpecs() {
               ref={priceRef}
               className="font-[family-name:var(--font-family-mono)] font-semibold text-[clamp(48px,8vw,80px)] text-[#FF6B00]"
             >
-              0 ₽/м²
+              150 ₽/м²
             </span>
             <span className="text-[#9a9a9a] text-sm">от производителя, без посредников</span>
           </div>
