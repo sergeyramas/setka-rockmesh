@@ -44,12 +44,6 @@ export default function CompareSlider() {
               aria-hidden
             />
           )}
-          <div className="absolute top-4 left-4 bg-black/60 text-white text-xs font-semibold px-3 py-1 rounded-full pointer-events-none">
-            {copy.compare.labelLeft}
-          </div>
-          <div className="absolute top-4 right-4 bg-[#FF6B00] text-white text-xs font-semibold px-3 py-1 rounded-full pointer-events-none">
-            {copy.compare.labelRight}
-          </div>
         </div>
 
         <p className="text-[#6B6B6B] text-sm mt-6 max-w-xl mx-auto text-center">
