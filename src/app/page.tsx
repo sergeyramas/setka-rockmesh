@@ -10,6 +10,7 @@ import Manufacturer from '@/components/landing/Manufacturer'
 import Certificates from '@/components/landing/Certificates'
 import RealReviews from '@/components/landing/RealReviews'
 import Delivery from '@/components/landing/Delivery'
+import DeliveryCalculator from '@/components/landing/DeliveryCalculator'
 import FinalCTA from '@/components/landing/FinalCTA'
 
 export default function Page() {
@@ -29,6 +30,7 @@ export default function Page() {
       <Certificates />
       <RealReviews />
       <Delivery />
+      <DeliveryCalculator />
       <FinalCTA />
     </main>
   )
