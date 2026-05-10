@@ -170,11 +170,11 @@ export default function Hero() {
               В наличии — отгрузка сегодня
             </span>
 
-            <h1 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-white mb-4">
+            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-white mb-4">
               Стеклопластиковая сетка
               <br />
               <span className="text-[#FF6B00]">{product.brand}</span>
-            </h1>
+            </h2>
 
             <p className="text-white/70 text-base sm:text-lg mb-8 leading-relaxed">
               {product.price} {product.priceUnit} · производство Гален · ISO 9001:2015
