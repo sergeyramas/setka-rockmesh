@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { ScrollTrigger } from '@/lib/gsap'
+import { useEffect, useRef, useState } from 'react'
 import { product } from '@/content/product'
 import { copy } from '@/content/copy'
+
+const FRAME_COUNT = 241
 
 type TooltipSpec = {
   label: string
@@ -45,115 +46,207 @@ function clamp01(v: number) {
   return Math.max(0, Math.min(1, v))
 }
 
+function frameUrl(i: number) {
+  return `/frames/frame_${String(i).padStart(3, '0')}.jpg`
+}
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const tooltipRefs = useRef<Array<HTMLDivElement | null>>([])
+  const imagesRef = useRef<HTMLImageElement[]>([])
+  const lastFrameRef = useRef<number>(-1)
+  const rafRef = useRef<number | null>(null)
+  const [loadedCount, setLoadedCount] = useState(0)
 
+  // 1. Preload all frames in parallel
   useEffect(() => {
-    const video = videoRef.current
+    const images: HTMLImageElement[] = []
+    let cancelled = false
+
+    for (let i = 1; i <= FRAME_COUNT; i++) {
+      const img = new Image()
+      img.src = frameUrl(i)
+      img.onload = () => {
+        if (cancelled) return
+        setLoadedCount((c) => c + 1)
+      }
+      images.push(img)
+    }
+    imagesRef.current = images
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // 2. Canvas size + draw on scroll
+  useEffect(() => {
+    const canvas = canvasRef.current
     const section = sectionRef.current
     const textEl = textRef.current
-    if (!video || !section) return
+    if (!canvas || !section) return
+
+    const ctx = canvas.getContext('2d', { alpha: false })
+    if (!ctx) return
+
+    function fitCanvas() {
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas!.getBoundingClientRect()
+      canvas!.width = Math.round(rect.width * dpr)
+      canvas!.height = Math.round(rect.height * dpr)
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    function drawFrame(idx: number) {
+      const img = imagesRef.current[idx]
+      if (!img || !img.complete || img.naturalWidth === 0) return
+      const cssW = canvas!.clientWidth
+      const cssH = canvas!.clientHeight
+      ctx!.fillStyle = '#ffffff'
+      ctx!.fillRect(0, 0, cssW, cssH)
+
+      // object-contain math
+      const ar = img.naturalWidth / img.naturalHeight
+      const canvasAr = cssW / cssH
+      let drawW = cssW
+      let drawH = cssH
+      if (ar > canvasAr) {
+        drawH = cssW / ar
+      } else {
+        drawW = cssH * ar
+      }
+      const dx = (cssW - drawW) / 2
+      const dy = (cssH - drawH) / 2
+      ctx!.drawImage(img, dx, dy, drawW, drawH)
+    }
+
+    function pickFrame(progress: number) {
+      const i = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(progress * (FRAME_COUNT - 1))))
+      // Walk back to nearest already-loaded frame so partial loading still shows something
+      for (let k = i; k >= 0; k--) {
+        const img = imagesRef.current[k]
+        if (img && img.complete && img.naturalWidth > 0) return k
+      }
+      return 0
+    }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const isMobile = window.matchMedia('(max-width: 768px)').matches
 
-    if (reduceMotion || isMobile) {
-      video.autoplay = true
-      video.loop = true
-      video.muted = true
-      const playPromise = video.play()
-      if (playPromise) playPromise.catch(() => {})
+    fitCanvas()
 
-      // On mobile, hide tooltips entirely — they overlap the H1.
-      // With reduced-motion on desktop, reveal them statically.
-      if (!isMobile) {
-        tooltipRefs.current.forEach((el) => {
-          if (el) {
-            el.style.opacity = '1'
-            el.style.transform = 'translateY(0)'
-          }
-        })
+    function update() {
+      rafRef.current = null
+      if (!section) return
+      const rect = section.getBoundingClientRect()
+      const total = section.offsetHeight - window.innerHeight
+      const progress = clamp01(-rect.top / Math.max(1, total))
+
+      const target = pickFrame(progress)
+      if (target !== lastFrameRef.current) {
+        drawFrame(target)
+        lastFrameRef.current = target
       }
-      return
-    }
 
-    let scrollTrigger: ScrollTrigger | null = null
-    let cancelled = false
+      if (textEl && !isMobile) {
+        const fade = clamp01(progress / 0.3)
+        textEl.style.opacity = String(1 - fade)
+        textEl.style.transform = `translateY(${-40 * fade}px)`
+      }
 
-    const setup = () => {
-      if (cancelled || !video.duration) return
-      video.pause()
-      video.currentTime = 0
-
-      scrollTrigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.5,
-        onUpdate: (self) => {
-          const p = self.progress
-
-          if (video.duration) {
-            const target = p * video.duration
-            if (Math.abs(video.currentTime - target) > 0.02) {
-              video.currentTime = target
-            }
-          }
-
-          if (textEl) {
-            const fade = clamp01(p / 0.3)
-            textEl.style.opacity = String(1 - fade)
-            textEl.style.transform = `translateY(${-40 * fade}px)`
-          }
-
-          tooltipRefs.current.forEach((el, i) => {
-            if (!el) return
-            const at = TOOLTIPS[i].appearAt
-            const op = clamp01((p - at) / 0.08)
-            el.style.opacity = String(op)
-            el.style.transform = `translateY(${(1 - op) * 10}px)`
-          })
-        },
+      tooltipRefs.current.forEach((el, i) => {
+        if (!el || isMobile) return
+        const at = TOOLTIPS[i].appearAt
+        const op = clamp01((progress - at) / 0.08)
+        el.style.opacity = String(op)
+        el.style.transform = `translateY(${(1 - op) * 10}px)`
       })
     }
 
-    if (video.readyState >= 1) {
-      setup()
+    function schedule() {
+      if (rafRef.current != null) return
+      rafRef.current = requestAnimationFrame(update)
+    }
+
+    function onResize() {
+      fitCanvas()
+      lastFrameRef.current = -1
+      schedule()
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', onResize)
+
+    // Mobile / reduced-motion: simple looping animation with setInterval
+    let interval: ReturnType<typeof setInterval> | null = null
+    if (reduceMotion || isMobile) {
+      let i = 0
+      interval = setInterval(() => {
+        i = (i + 1) % FRAME_COUNT
+        drawFrame(i)
+        lastFrameRef.current = i
+      }, 60)
     } else {
-      video.addEventListener('loadedmetadata', setup, { once: true })
+      schedule()
+    }
+
+    // Initial draw — paint frame 0 as soon as it arrives
+    const first = imagesRef.current[0]
+    if (first) {
+      if (first.complete && first.naturalWidth > 0) {
+        drawFrame(0)
+        lastFrameRef.current = 0
+      } else {
+        first.addEventListener('load', () => {
+          drawFrame(0)
+          lastFrameRef.current = 0
+        }, { once: true })
+      }
     }
 
     return () => {
-      cancelled = true
-      video.removeEventListener('loadedmetadata', setup)
-      scrollTrigger?.kill()
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', onResize)
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current)
+      if (interval) clearInterval(interval)
     }
   }, [])
+
+  // Trigger initial draw once frames start loading
+  useEffect(() => {
+    if (loadedCount > 0 && lastFrameRef.current === -1 && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d', { alpha: false })
+      const img = imagesRef.current[0]
+      if (ctx && img && img.complete && img.naturalWidth > 0) {
+        const cssW = canvasRef.current.clientWidth
+        const cssH = canvasRef.current.clientHeight
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, cssW, cssH)
+        const ar = img.naturalWidth / img.naturalHeight
+        const canvasAr = cssW / cssH
+        let drawW = cssW, drawH = cssH
+        if (ar > canvasAr) drawH = cssW / ar
+        else drawW = cssH * ar
+        ctx.drawImage(img, (cssW - drawW) / 2, (cssH - drawH) / 2, drawW, drawH)
+        lastFrameRef.current = 0
+      }
+    }
+  }, [loadedCount])
 
   return (
     <section
       ref={sectionRef}
-      className="relative"
+      className="relative bg-white"
       style={{ height: '300vh' }}
       aria-label="ROCKMESH — стеклопластиковая сетка"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
-        <video
-          ref={videoRef}
-          src="/video/rockmesh-hero.mp4"
-          muted
-          playsInline
-          preload="auto"
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full"
           aria-hidden
-          className="absolute inset-0 w-full h-full object-contain"
-        />
-
-        <div
-          aria-hidden
-          className="absolute inset-y-0 left-0 w-full md:w-3/5 bg-gradient-to-r from-[#0F0F0F] via-[#0F0F0F]/80 to-transparent"
         />
 
         <div className="absolute inset-y-0 left-0 z-10 flex items-center pointer-events-none">
@@ -170,13 +263,13 @@ export default function Hero() {
               В наличии — отгрузка сегодня
             </span>
 
-            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-white mb-4">
+            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-[#0F0F0F] mb-4">
               Стеклопластиковая сетка
               <br />
               <span className="text-[#FF6B00]">{product.brand}</span>
             </h2>
 
-            <p className="text-white/70 text-base sm:text-lg mb-8 leading-relaxed">
+            <p className="text-[#6B6B6B] text-base sm:text-lg mb-8 leading-relaxed">
               {product.price} {product.priceUnit} · производство Гален · ISO 9001:2015
               <br />
               Доставка СДЭК по всей России
@@ -193,7 +286,7 @@ export default function Hero() {
                 href={product.contact.telegramLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center min-h-11 border border-white/30 text-white px-5 sm:px-6 py-3 rounded-lg font-semibold hover:border-white transition-colors"
+                className="inline-flex items-center min-h-11 border border-black/15 text-[#0F0F0F] px-5 sm:px-6 py-3 rounded-lg font-semibold hover:border-[#0F0F0F] transition-colors"
               >
                 {copy.cta.telegram}
               </a>
@@ -211,17 +304,17 @@ export default function Hero() {
             style={{ opacity: 0, transform: 'translateY(10px)', willChange: 'transform, opacity' }}
             aria-hidden
           >
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-4 py-3 shadow-lg">
+            <div className="bg-white border border-black/10 rounded-xl px-4 py-3 shadow-md">
               <div className="text-[#FF6B00] font-semibold text-sm mb-0.5">{t.label}</div>
-              <div className="text-white/80 text-xs leading-snug">{t.detail}</div>
+              <div className="text-[#6B6B6B] text-xs leading-snug">{t.detail}</div>
             </div>
-            <div className="absolute w-px h-8 bg-white/30 left-1/2 -bottom-8" />
+            <div className="absolute w-px h-8 bg-black/20 left-1/2 -bottom-8" />
           </div>
         ))}
 
         <div
           aria-hidden
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/50 text-xs uppercase tracking-widest"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-[#9a9a9a] text-xs uppercase tracking-widest"
         >
           ↓ Прокрутите, чтобы увидеть состав
         </div>
