@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
-// TODO: replace placeholder domain with the production URL
-const SITE_URL = 'https://rockmesh.example'
+// TODO: replace with custom domain when registered
+const SITE_URL = 'https://setka-rockmesh.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

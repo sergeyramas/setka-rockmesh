@@ -6,8 +6,8 @@ import Footer from '@/components/global/Footer'
 import { product } from '@/content/product'
 import './globals.css'
 
-// TODO: replace with the real production domain once registered
-const SITE_URL = 'https://rockmesh.example'
+// TODO: replace with the real custom domain once registered
+const SITE_URL = 'https://setka-rockmesh.vercel.app'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
