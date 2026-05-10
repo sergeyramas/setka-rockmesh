@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '#usecases', label: 'Применение' },
   { href: '#specs', label: 'Характеристики' },
   { href: '#manufacturer', label: 'Производитель' },
+  { href: '#reviews', label: 'Отзывы' },
   { href: '#delivery', label: 'Доставка' },
 ]
 

@@ -1,0 +1,32 @@
+[
+  {
+    "tag": "a",
+    "text": "ROCKMESH",
+    "w": 109,
+    "h": 28
+  },
+  {
+    "tag": "button",
+    "text": "",
+    "w": 40,
+    "h": 40
+  },
+  {
+    "tag": "button",
+    "text": "",
+    "w": 40,
+    "h": 40
+  },
+  {
+    "tag": "a",
+    "text": "8 (800) 200-18-49",
+    "w": 124,
+    "h": 17
+  },
+  {
+    "tag": "a",
+    "text": "info@galencomposite.ru",
+    "w": 161,
+    "h": 17
+  }
+]

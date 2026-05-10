@@ -75,6 +75,11 @@ body {
   to { transform: translateX(-50%); }
 }
 
+/* Sticky header is 64px tall — offset anchor scroll so headings aren't hidden behind it. */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
 /* Pulse rings for callback button (Betaline-style) */
 @keyframes nav-callback-pulse {
   0% { transform: scale(1); opacity: 0.6; }

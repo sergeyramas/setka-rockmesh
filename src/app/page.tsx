@@ -8,6 +8,7 @@ import UseCasesBento from '@/components/landing/UseCasesBento'
 import TechSpecs from '@/components/landing/TechSpecs'
 import Manufacturer from '@/components/landing/Manufacturer'
 import Certificates from '@/components/landing/Certificates'
+import RealReviews from '@/components/landing/RealReviews'
 import Delivery from '@/components/landing/Delivery'
 import FinalCTA from '@/components/landing/FinalCTA'
 
@@ -26,6 +27,7 @@ export default function Page() {
       <TechSpecs />
       <Manufacturer />
       <Certificates />
+      <RealReviews />
       <Delivery />
       <FinalCTA />
     </main>
