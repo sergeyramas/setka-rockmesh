@@ -250,12 +250,13 @@ export default function Hero() {
           aria-hidden
         />
 
-        <div className="absolute inset-y-0 left-0 z-10 flex items-center pointer-events-none">
-          <div
-            ref={textRef}
-            className="ml-4 sm:ml-8 md:ml-12 mr-4 max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
-            style={{ willChange: 'transform, opacity' }}
-          >
+        <div className="absolute inset-0 z-10 flex items-center pointer-events-none">
+          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-8">
+            <div
+              ref={textRef}
+              className="max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
+              style={{ willChange: 'transform, opacity' }}
+            >
             <span className="inline-flex items-center gap-2 text-[#00A86B] text-xs sm:text-sm font-semibold uppercase tracking-widest mb-4">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00A86B] opacity-75" />
@@ -297,6 +298,7 @@ export default function Hero() {
                 </svg>
                 {copy.cta.telegram}
               </a>
+            </div>
             </div>
           </div>
         </div>
