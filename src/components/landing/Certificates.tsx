@@ -10,9 +10,9 @@ export default function Certificates() {
   const [open, setOpen] = useState<string | null>(null)
 
   return (
-    <section className="py-20 bg-[#1A1A1A]">
+    <section className="py-20 bg-[#F5F5F5]">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-white mb-4">
+        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-4">
           {copy.certificates.heading}
         </h2>
         <p className="text-[#6B6B6B] mb-12">{copy.certificates.body}</p>
@@ -22,7 +22,7 @@ export default function Certificates() {
             <motion.div
               key={cert.name}
               layoutId={`cert-${cert.image}`}
-              className="bg-[#0F0F0F] rounded-[16px] overflow-hidden cursor-zoom-in"
+              className="bg-white border border-black/5 shadow-sm rounded-[16px] overflow-hidden cursor-zoom-in"
               onClick={() => setOpen(cert.image)}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}

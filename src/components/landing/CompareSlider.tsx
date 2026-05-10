@@ -39,7 +39,7 @@ export default function CompareSlider() {
             />
           ) : (
             <div
-              className="bg-[#1A1A1A]/5"
+              className="bg-[#F5F5F5]"
               style={{ height: 480 }}
               aria-hidden
             />

@@ -4,9 +4,9 @@ import { copy } from '@/content/copy'
 
 export default function Composition() {
   return (
-    <section className="py-20 bg-[#0F0F0F]">
+    <section className="py-20 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-white mb-4">
+        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-4">
           {copy.composition.heading}
         </h2>
         <p className="text-[#6B6B6B] mb-12 max-w-xl">
@@ -16,7 +16,7 @@ export default function Composition() {
         {/* Wow-video slot — replaced post-launch */}
         <div
           data-wow-video-slot
-          className="w-full aspect-video bg-[#1A1A1A] rounded-[16px] mb-12 flex items-center justify-center text-[#6B6B6B] text-sm"
+          className="w-full aspect-video bg-[#F5F5F5] rounded-[16px] mb-12 flex items-center justify-center text-[#6B6B6B] text-sm"
           aria-hidden="true"
         >
           {copy.composition.wowSlot}
@@ -26,7 +26,7 @@ export default function Composition() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {product.composition.map((layer, i) => (
             <div key={layer.key} className="flex flex-col gap-4">
-              <div className="aspect-square bg-[#1A1A1A] rounded-[16px] overflow-hidden relative">
+              <div className="aspect-square bg-[#F5F5F5] rounded-[16px] overflow-hidden relative">
                 <Image
                   src={layer.image}
                   alt={layer.label}
@@ -39,7 +39,7 @@ export default function Composition() {
                 </div>
               </div>
               <div>
-                <p className="font-[family-name:var(--font-family-display)] font-bold text-white text-sm">
+                <p className="font-[family-name:var(--font-family-display)] font-bold text-[#0F0F0F] text-sm">
                   {layer.label}
                 </p>
                 <p className="text-[#6B6B6B] text-xs mt-1 leading-relaxed">{layer.sub}</p>

@@ -27,7 +27,7 @@ export default function MobileStickyCTA() {
           exit={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 56 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex h-14 shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
+          <div className="flex h-14 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
             <a
               href={`tel:${product.contact.phone}`}
               className="flex-1 flex items-center justify-center gap-2 bg-[#FF6B00] text-white font-[family-name:var(--font-family-display)] font-bold text-sm"

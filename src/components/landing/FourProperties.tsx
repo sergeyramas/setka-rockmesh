@@ -48,7 +48,7 @@ export default function FourProperties() {
   }, [shouldReduce])
 
   return (
-    <section className="py-20 bg-[#1A1A1A] grain-overlay">
+    <section className="py-20 bg-[#F5F5F5]">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
         <div
           ref={containerRef}
@@ -58,7 +58,7 @@ export default function FourProperties() {
             <div
               key={prop.key}
               data-property-card
-              className="bg-[#0F0F0F] rounded-[16px] p-6 flex flex-col gap-4"
+              className="bg-white border border-black/5 shadow-sm rounded-[16px] p-6 flex flex-col gap-4"
             >
               <div className="w-12 h-12 text-[#FF6B00]">
                 <Image
@@ -70,7 +70,7 @@ export default function FourProperties() {
                   style={{ filter: 'invert(52%) sepia(97%) saturate(1200%) hue-rotate(360deg)' }}
                 />
               </div>
-              <h3 className="font-[family-name:var(--font-family-display)] font-bold text-lg text-white">
+              <h3 className="font-[family-name:var(--font-family-display)] font-bold text-lg text-[#0F0F0F]">
                 {prop.title}
               </h3>
               <p className="text-[#6B6B6B] text-sm leading-relaxed">{prop.body}</p>

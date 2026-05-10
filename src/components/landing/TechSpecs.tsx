@@ -37,23 +37,23 @@ export default function TechSpecs() {
   }, [shouldReduce])
 
   return (
-    <section className="py-20 bg-[#1A1A1A]">
+    <section className="py-20 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-white mb-12">
+        <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-12">
           {copy.specs.heading}
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Count-up highlight */}
-          <div className="bg-[#0F0F0F] rounded-[24px] p-10 flex flex-col gap-3">
-            <span className="text-[#6B6B6B] text-sm uppercase tracking-widest">Цена</span>
+          {/* Count-up highlight — intentionally dark card on white page */}
+          <div className="bg-[#0F0F0F] text-white rounded-[24px] p-10 flex flex-col gap-3">
+            <span className="text-[#9a9a9a] text-sm uppercase tracking-widest">Цена</span>
             <span
               ref={priceRef}
               className="font-[family-name:var(--font-family-mono)] font-semibold text-[clamp(48px,8vw,80px)] text-[#FF6B00]"
             >
               0 ₽/м²
             </span>
-            <span className="text-[#6B6B6B] text-sm">от производителя, без посредников</span>
+            <span className="text-[#9a9a9a] text-sm">от производителя, без посредников</span>
           </div>
 
           {/* Specs table */}
@@ -62,10 +62,10 @@ export default function TechSpecs() {
               {copy.specs.rows.map((row, i) => (
                 <tr
                   key={row.label}
-                  className={`border-b border-white/10 ${i % 2 === 0 ? 'bg-[#0F0F0F]/50' : ''}`}
+                  className={`border-b border-black/10 ${i % 2 === 0 ? 'bg-[#F5F5F5]/50' : ''}`}
                 >
                   <td className="py-3 px-4 text-[#6B6B6B]">{row.label}</td>
-                  <td className="py-3 px-4 text-right font-[family-name:var(--font-family-mono)] font-semibold text-white">
+                  <td className="py-3 px-4 text-right font-[family-name:var(--font-family-mono)] font-semibold text-[#0F0F0F]">
                     {row.value}
                   </td>
                 </tr>

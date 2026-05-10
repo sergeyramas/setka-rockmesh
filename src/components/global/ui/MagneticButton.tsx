@@ -36,7 +36,7 @@ export default function MagneticButton({
   const variantClass = {
     primary: 'bg-accent text-white hover:bg-accent-hover',
     secondary: 'bg-green-500 text-white hover:bg-green-400',
-    ghost: 'border border-white/30 text-white hover:border-accent hover:text-accent',
+    ghost: 'border border-black/20 text-[#0F0F0F] hover:border-accent hover:text-accent',
   }[variant]
 
   const inner = (

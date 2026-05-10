@@ -13,7 +13,7 @@ export default function UseCasesBento() {
           {product.useCases.map((uc) => (
             <div
               key={uc.key}
-              className="relative group rounded-[16px] overflow-hidden aspect-[4/3] bg-[#0F0F0F]"
+              className="relative group rounded-[16px] overflow-hidden aspect-[4/3] bg-white border border-black/5 shadow-sm"
             >
               <Image
                 src={uc.image}
