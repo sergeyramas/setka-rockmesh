@@ -4,7 +4,7 @@ import { copy } from '@/content/copy'
 
 export default function UseCasesBento() {
   return (
-    <section className="py-20 bg-[#F5F5F5]">
+    <section id="usecases" className="py-20 bg-[#F5F5F5]">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
         <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-12">
           {copy.useCases.heading}

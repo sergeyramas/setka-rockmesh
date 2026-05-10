@@ -4,7 +4,7 @@ import { copy } from '@/content/copy'
 
 export default function Composition() {
   return (
-    <section className="py-20 bg-white">
+    <section id="composition" className="py-20 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
         <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-4">
           {copy.composition.heading}
