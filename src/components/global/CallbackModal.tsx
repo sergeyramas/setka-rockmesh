@@ -7,10 +7,14 @@ type Props = {
   onClose: () => void
 }
 
+const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID
+const FORMSPREE_ENDPOINT = FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : null
+
 export default function CallbackModal({ open, onClose }: Props) {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -26,16 +30,41 @@ export default function CallbackModal({ open, onClose }: Props) {
     }
   }, [open, onClose])
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setSubmitted(true)
-    // TODO: wire to backend or formspree/getform endpoint
-    setTimeout(() => {
-      onClose()
-      setSubmitted(false)
-      setName('')
-      setPhone('')
-    }, 2200)
+    if (!FORMSPREE_ENDPOINT) {
+      setStatus('error')
+      setErrorMsg('Форма временно недоступна. Позвоните, пожалуйста, по телефону вверху страницы — мы на связи в рабочее время.')
+      return
+    }
+    setStatus('sending')
+    setErrorMsg(null)
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name,
+          phone,
+          source: 'setka-rockmesh callback modal',
+          page: typeof window !== 'undefined' ? window.location.href : '',
+        }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.error || `HTTP ${res.status}`)
+      }
+      setStatus('success')
+      setTimeout(() => {
+        onClose()
+        setStatus('idle')
+        setName('')
+        setPhone('')
+      }, 2400)
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err instanceof Error ? err.message : 'Не удалось отправить. Позвоните, пожалуйста, по телефону вверху страницы.')
+    }
   }
 
   return (
@@ -65,7 +94,7 @@ export default function CallbackModal({ open, onClose }: Props) {
               ×
             </button>
 
-            {submitted ? (
+            {status === 'success' ? (
               <div className="py-8 text-center">
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-[#00A86B]/10 flex items-center justify-center">
                   <svg className="w-7 h-7 text-[#00A86B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -106,11 +135,15 @@ export default function CallbackModal({ open, onClose }: Props) {
                   />
                   <button
                     type="submit"
-                    className="bg-[#FF6B00] text-white font-bold py-3 rounded-lg hover:bg-[#EA580C] transition-colors mt-2 shadow-[0_8px_24px_rgba(255,107,0,0.25)]"
+                    disabled={status === 'sending'}
+                    className="bg-[#FF6B00] text-white font-bold py-3 rounded-lg hover:bg-[#EA580C] transition-colors mt-2 shadow-[0_8px_24px_rgba(255,107,0,0.25)] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Позвоните мне
+                    {status === 'sending' ? 'Отправляем…' : 'Позвоните мне'}
                   </button>
                 </form>
+                {status === 'error' && errorMsg && (
+                  <p className="text-sm text-[#E53935] mt-3 leading-relaxed">{errorMsg}</p>
+                )}
                 <p className="text-[10px] text-[#9a9a9a] text-center mt-4 leading-relaxed">
                   Нажимая кнопку, вы соглашаетесь на обработку персональных данных.
                 </p>

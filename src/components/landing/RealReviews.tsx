@@ -116,35 +116,6 @@ export default function RealReviews() {
         Имена сокращены до инициала фамилии. Полный список ссылок предоставляется по запросу.
       </p>
 
-      <style jsx>{`
-        .reviews-track {
-          animation: reviews-scroll 60s linear infinite;
-        }
-        .reviews-marquee:hover .reviews-track,
-        .reviews-marquee:focus-within .reviews-track {
-          animation-play-state: paused;
-        }
-        @keyframes reviews-scroll {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-50%);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .reviews-track {
-            animation: none;
-          }
-          .reviews-marquee {
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-          }
-          .reviews-marquee :global(article) {
-            scroll-snap-align: start;
-          }
-        }
-      `}</style>
     </section>
   )
 }

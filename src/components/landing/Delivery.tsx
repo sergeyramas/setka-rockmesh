@@ -101,12 +101,12 @@ export default function Delivery() {
   return (
     <section ref={sectionRef} id="delivery" className="py-20 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12 items-start">
           <div>
-            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-6">
+            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,3.5vw,42px)] leading-[1.08] text-balance text-[#0F0F0F] mb-6">
               {copy.delivery.heading}
             </h2>
-            <p className="text-[#6B6B6B] leading-relaxed mb-6">{copy.delivery.body}</p>
+            <p className="text-base text-[#3a3a3a] leading-relaxed mb-6">{copy.delivery.body}</p>
 
             <div className="rounded-2xl bg-[#F5F5F5] p-5 mb-6">
               <div className="text-xs text-[#6B6B6B] uppercase tracking-widest font-semibold mb-1">

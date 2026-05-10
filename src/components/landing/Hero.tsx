@@ -264,16 +264,16 @@ export default function Hero() {
               В наличии — отгрузка сегодня
             </span>
 
-            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-[#0F0F0F] mb-4">
-              Стеклопластиковая сетка
-              <br />
-              <span className="text-[#FF6B00]">{product.brand}</span>
+            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-balance text-[#0F0F0F] mb-4">
+              {copy.hero.h1}
             </h2>
 
-            <p className="text-[#6B6B6B] text-base sm:text-lg mb-8 leading-relaxed">
-              {product.price} {product.priceUnit} · производство Гален · ISO 9001:2015
-              <br />
-              Доставка СДЭК по всей России
+            <p className="text-[#3a3a3a] text-base sm:text-lg mb-3 leading-relaxed">
+              {copy.hero.h2}
+            </p>
+
+            <p className="text-[#6B6B6B] text-sm mb-8 leading-relaxed">
+              <span className="text-[#FF6B00] font-semibold">{product.brand}</span> · {product.price} {product.priceUnit} · производство Гален · ISO 9001:2015 · Доставка СДЭК
             </p>
 
             <div className="flex gap-3 sm:gap-4 flex-wrap">

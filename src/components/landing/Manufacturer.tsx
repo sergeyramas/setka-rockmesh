@@ -6,14 +6,14 @@ export default function Manufacturer() {
   return (
     <section id="manufacturer" className="py-20 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-12 items-center">
           {/* Left: lab photo + text */}
-          <div>
+          <div className="max-w-[640px]">
             <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,48px)] text-[#0F0F0F] mb-6">
               {copy.manufacturer.heading}
             </h2>
-            <p className="text-[#6B6B6B] leading-relaxed mb-4">{copy.manufacturer.body}</p>
-            <p className="text-[#6B6B6B] leading-relaxed mb-8">{copy.manufacturer.body2}</p>
+            <p className="text-base sm:text-lg text-[#3a3a3a] leading-relaxed mb-4">{copy.manufacturer.body}</p>
+            <p className="text-base sm:text-lg text-[#3a3a3a] leading-relaxed mb-8">{copy.manufacturer.body2}</p>
             <div className="text-sm text-[#6B6B6B]">
               <span className="text-[#0F0F0F] font-semibold">{copy.manufacturer.ogrnLabel}: </span>
               <span className="font-[family-name:var(--font-family-mono)]">
@@ -23,7 +23,7 @@ export default function Manufacturer() {
           </div>
 
           {/* Right: lab photo */}
-          <div className="relative aspect-[4/3] rounded-[16px] overflow-hidden">
+          <div className="relative aspect-[5/4] rounded-[16px] overflow-hidden">
             <Image
               src={product.photos.lab}
               alt="Лаборатория контроля качества Гален"
@@ -38,32 +38,29 @@ export default function Manufacturer() {
           </div>
         </div>
 
-        {/* Objects */}
-        <div className="mt-16">
-          <h3 className="font-[family-name:var(--font-family-display)] font-bold text-xl text-[#0F0F0F] mb-8">
-            {copy.manufacturer.objectsHeading}
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {product.objects.map((obj) => (
-              <div
-                key={obj.name}
-                className="bg-white border border-black/5 shadow-sm rounded-[16px] overflow-hidden"
-              >
-                <div className="relative aspect-video">
-                  <Image
-                    src={obj.image}
-                    alt={obj.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-[#0F0F0F] text-sm">{obj.name}</p>
-                  <p className="text-[#6B6B6B] text-xs mt-1">{obj.location}</p>
-                </div>
-              </div>
-            ))}
+        {/* Production note — replaces "Objects with ROCKMESH" placeholders.
+            Real client-object photos pending; ship the truthful version meanwhile. */}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 items-center">
+          <div>
+            <h3 className="font-[family-name:var(--font-family-display)] font-bold text-xl text-[#0F0F0F] mb-3">
+              География производства
+            </h3>
+            <p className="text-[#3a3a3a] leading-relaxed">
+              Сетка ROCKMESH идёт на стройки и инфраструктуру по всей России и в десятки стран мира. Список объектов и фото с площадок уточняются у клиента — будут опубликованы по мере получения подтверждений.
+            </p>
+          </div>
+          <div className="relative aspect-[16/9] rounded-[16px] overflow-hidden">
+            <Image
+              src="/codex/galen-factory.png"
+              alt="Производственная линия ROCKMESH на заводе «Гален»"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 60vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+            <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-[8px]">
+              Производственная линия, г. Чебоксары
+            </div>
           </div>
         </div>
       </div>
