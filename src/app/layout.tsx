@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google'
 import LenisProvider from '@/components/global/LenisProvider'
+import MobileStickyCTA from '@/components/global/MobileStickyCTA'
 import './globals.css'
 
 const inter = Inter({
@@ -48,6 +49,7 @@ export default function RootLayout({
         <LenisProvider>
           {children}
         </LenisProvider>
+        <MobileStickyCTA />
       </body>
     </html>
   )
