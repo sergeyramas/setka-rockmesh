@@ -21,13 +21,11 @@
   --max-width-content: 1280px;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Tailwind v4 Preflight (loaded by @import "tailwindcss") already sets
+   box-sizing: border-box on all elements. The previous hand-rolled reset
+   ALSO zeroed margins/paddings universally, which silently overrode every
+   `mx-auto` utility on the site (computed marginLeft: 0px) and pinned all
+   sections to the viewport's left edge on screens wider than 1280px. */
 
 html {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
