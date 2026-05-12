@@ -164,22 +164,45 @@ export default function Hero() {
         lastFrameRef.current = target
       }
 
-      // Large screens only: card fades in centered at the end of the scroll
-      if (textEl && window.innerWidth >= 1000) {
+      // Card animation: left -> hidden -> center
+      if (textEl) {
         let opacity: number
         let translateY: number
+        let scale: number
+        let isCentered = false
 
-        if (progress < 0.7) {
+        if (progress <= 0.25) {
+          // Phase 1: Disappear (Left aligned)
+          const t = clamp01(progress / 0.25)
+          opacity = 1 - t
+          translateY = 20 * t
+          scale = 1 - 0.05 * t
+          isCentered = false
+        } else if (progress < 0.65) {
+          // Phase 2: Hidden
           opacity = 0
-          translateY = 20
+          translateY = 0
+          scale = 0.95
+          isCentered = true
         } else {
-          const t = clamp01((progress - 0.7) / 0.15)
+          // Phase 3: Appear (Centered)
+          const t = clamp01((progress - 0.65) / 0.15)
           opacity = t
           translateY = 20 * (1 - t)
+          scale = 0.95 + 0.05 * t
+          isCentered = true
         }
 
         textEl.style.opacity = String(opacity)
-        textEl.style.transform = `translateY(${translateY}px)`
+        textEl.style.transform = `translateY(${translateY}px) scale(${scale})`
+
+        if (isCentered) {
+          textEl.style.marginLeft = 'auto'
+          textEl.style.marginRight = 'auto'
+        } else {
+          textEl.style.marginLeft = '0'
+          textEl.style.marginRight = '0'
+        }
       }
 
       tooltipRefs.current.forEach((el, i) => {
@@ -276,22 +299,22 @@ export default function Hero() {
           aria-hidden
         />
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-8 flex justify-center">
+        <div className="absolute inset-0 z-10 flex items-end pb-[12vh] sm:items-center sm:pb-0 pointer-events-none">
+          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-8">
             <div
               ref={textRef}
-              className="hidden min-[1000px]:block max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
-              style={{ willChange: 'transform, opacity', opacity: 0 }}
+              className="max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-5 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)] origin-bottom sm:origin-center"
+              style={{ willChange: 'transform, opacity, margin', opacity: 1 }}
             >
-            <span className="inline-flex items-center gap-2 text-[#00A86B] text-xs sm:text-sm font-semibold uppercase tracking-widest mb-4">
-              <span className="relative flex h-2 w-2">
+            <span className="inline-flex items-center gap-2 text-[#00A86B] text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-3 sm:mb-4">
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00A86B] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00A86B]" />
+                <span className="relative inline-flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#00A86B]" />
               </span>
               В наличии — отгрузка сегодня
             </span>
 
-            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(28px,4vw,56px)] leading-[1.05] text-balance text-[#0F0F0F] mb-4">
+            <h2 className="font-[family-name:var(--font-family-display)] font-extrabold text-[clamp(24px,4vw,56px)] leading-[1.05] text-balance text-[#0F0F0F] mb-3 sm:mb-4">
               {copy.hero.h1}
             </h2>
 
