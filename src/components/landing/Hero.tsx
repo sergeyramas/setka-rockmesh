@@ -9,7 +9,8 @@ const FRAME_COUNT = 241
 type TooltipSpec = {
   label: string
   detail: string
-  className: string
+  x: string
+  y: string
   appearAt: number
 }
 
@@ -17,25 +18,29 @@ const TOOLTIPS: TooltipSpec[] = [
   {
     label: 'Эпоксидная смола',
     detail: 'Связующее: аминный отвердитель',
-    className: 'top-[15%] left-[38%]',
+    x: '18%',
+    y: '38%',
     appearAt: 0.35,
   },
   {
     label: 'Стеклянные нити',
     detail: 'Высокомодульный ровинг',
-    className: 'top-[10%] right-[15%]',
+    x: '75%',
+    y: '20%',
     appearAt: 0.45,
   },
   {
     label: 'Кварцевый песок',
     detail: 'Покрытие для адгезии в бетоне',
-    className: 'bottom-[15%] left-[30%]',
+    x: '28%',
+    y: '85%',
     appearAt: 0.55,
   },
   {
     label: 'Узел вязки',
     detail: 'Полимерный фиксатор',
-    className: 'top-[45%] right-[10%]',
+    x: '85%',
+    y: '65%',
     appearAt: 0.65,
   },
 ]
@@ -55,6 +60,7 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const tooltipRefs = useRef<Array<HTMLDivElement | null>>([])
+  const tooltipsContainerRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
   const lastFrameRef = useRef<number>(-1)
   const rafRef = useRef<number | null>(null)
@@ -120,6 +126,14 @@ export default function Hero() {
       const dx = (cssW - drawW) / 2
       const dy = (cssH - drawH) / 2
       ctx!.drawImage(img, dx, dy, drawW, drawH)
+
+      // Anchor tooltips to the drawn image bounds
+      if (tooltipsContainerRef.current) {
+        tooltipsContainerRef.current.style.width = `${drawW}px`
+        tooltipsContainerRef.current.style.height = `${drawH}px`
+        tooltipsContainerRef.current.style.left = `${dx}px`
+        tooltipsContainerRef.current.style.top = `${dy}px`
+      }
     }
 
     function pickFrame(progress: number) {
@@ -150,10 +164,22 @@ export default function Hero() {
         lastFrameRef.current = target
       }
 
-      if (textEl && !isMobile) {
-        const fade = clamp01(progress / 0.3)
-        textEl.style.opacity = String(1 - fade)
-        textEl.style.transform = `translateY(${-40 * fade}px)`
+      // Large screens only: card fades in centered at the end of the scroll
+      if (textEl && window.innerWidth >= 1000) {
+        let opacity: number
+        let translateY: number
+
+        if (progress < 0.7) {
+          opacity = 0
+          translateY = 20
+        } else {
+          const t = clamp01((progress - 0.7) / 0.15)
+          opacity = t
+          translateY = 20 * (1 - t)
+        }
+
+        textEl.style.opacity = String(opacity)
+        textEl.style.transform = `translateY(${translateY}px)`
       }
 
       tooltipRefs.current.forEach((el, i) => {
@@ -161,7 +187,7 @@ export default function Hero() {
         const at = TOOLTIPS[i].appearAt
         const op = clamp01((progress - at) / 0.08)
         el.style.opacity = String(op)
-        el.style.transform = `translateY(${(1 - op) * 10}px)`
+        el.style.transform = `translate(-50%, calc(-100% + ${(1 - op) * 10}px))`
       })
     }
 
@@ -250,12 +276,12 @@ export default function Hero() {
           aria-hidden
         />
 
-        <div className="absolute inset-0 z-10 flex items-center pointer-events-none">
-          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-8">
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-8 flex justify-center">
             <div
               ref={textRef}
-              className="max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
-              style={{ willChange: 'transform, opacity' }}
+              className="hidden min-[1000px]:block max-w-lg pointer-events-auto bg-white/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
+              style={{ willChange: 'transform, opacity', opacity: 0 }}
             >
             <span className="inline-flex items-center gap-2 text-[#00A86B] text-xs sm:text-sm font-semibold uppercase tracking-widest mb-4">
               <span className="relative flex h-2 w-2">
@@ -303,23 +329,26 @@ export default function Hero() {
           </div>
         </div>
 
-        {TOOLTIPS.map((t, i) => (
-          <div
-            key={t.label}
-            ref={(el) => {
-              tooltipRefs.current[i] = el
-            }}
-            className={`absolute z-20 pointer-events-none max-w-[200px] hidden md:block ${t.className}`}
-            style={{ opacity: 0, transform: 'translateY(10px)', willChange: 'transform, opacity' }}
-            aria-hidden
-          >
-            <div className="bg-white border border-black/10 rounded-xl px-4 py-3 shadow-md">
-              <div className="text-[#FF6B00] font-semibold text-sm mb-0.5">{t.label}</div>
-              <div className="text-[#6B6B6B] text-xs leading-snug">{t.detail}</div>
+        <div ref={tooltipsContainerRef} className="absolute z-20 pointer-events-none">
+          {TOOLTIPS.map((t, i) => (
+            <div
+              key={t.label}
+              ref={(el) => {
+                tooltipRefs.current[i] = el
+              }}
+              className="absolute pointer-events-none hidden md:flex flex-col items-center"
+              style={{ left: t.x, top: t.y, opacity: 0, transform: 'translate(-50%, calc(-100% + 10px))', willChange: 'transform, opacity' }}
+              aria-hidden
+            >
+              <div className="bg-white border border-black/10 rounded-xl px-4 py-3 shadow-md w-max max-w-[200px]">
+                <div className="text-[#FF6B00] font-semibold text-sm mb-0.5">{t.label}</div>
+                <div className="text-[#6B6B6B] text-xs leading-snug">{t.detail}</div>
+              </div>
+              <div className="w-px h-8 bg-black/20" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#FF6B00] absolute bottom-0 translate-y-1/2" />
             </div>
-            <div className="absolute w-px h-8 bg-black/20 left-1/2 -bottom-8" />
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div
           aria-hidden
